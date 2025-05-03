@@ -1,0 +1,67 @@
+# Development Dockerfile for Terraform Spotify Provider
+# Multi-stage build with distroless final image
+
+# Build stage
+FROM golang:1.20-alpine AS builder
+
+# Install build dependencies and development tools
+RUN apk add --no-cache \
+    git \
+    make \
+    bash \
+    curl \
+    gcc \
+    musl-dev \
+    ca-certificates \
+    tzdata
+
+# Install golangci-lint
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.54.2
+
+# Set working directory
+WORKDIR /app
+
+# Copy go.mod and go.sum first to leverage Docker cache
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the provider
+RUN make build
+
+# Development image
+FROM gcr.io/distroless/base-debian11 AS dev
+
+# Copy the built binary from the builder stage
+COPY --from=builder /app/terraform-provider-spotify /app/terraform-provider-spotify
+
+# Copy necessary development files
+COPY --from=builder /app/go.mod /app/go.mod
+COPY --from=builder /app/go.sum /app/go.sum
+COPY --from=builder /app/Makefile /app/Makefile
+COPY --from=builder /app/scripts /app/scripts
+COPY --from=builder /app/examples /app/examples
+COPY --from=builder /app/spotify /app/spotify
+COPY --from=builder /app/spotify_auth_proxy /app/spotify_auth_proxy
+COPY --from=builder /app/version /app/version
+
+# Copy development tools
+COPY --from=builder /usr/local/bin/golangci-lint /usr/local/bin/golangci-lint
+
+# Copy Go from builder
+COPY --from=builder /usr/local/go /usr/local/go
+
+# Set environment variables
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOPATH="/go"
+ENV GOBIN="/go/bin"
+ENV PATH="${PATH}:/go/bin"
+
+# Set working directory
+WORKDIR /app
+
+CMD ["/bin/bash"]

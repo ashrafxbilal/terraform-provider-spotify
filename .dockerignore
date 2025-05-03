@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+.github
+
+# Build artifacts
+terraform-provider-spotify
+
+# Terraform state files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# Logs
+*.log
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Docker files (to prevent recursive copying)
+Dockerfile*
+.dockerignore
+
+# Documentation
+*.md
+LICENSE
+
+# Test files
+**/*_test.go
+
+# Temporary files
+tmp/
+temp/
