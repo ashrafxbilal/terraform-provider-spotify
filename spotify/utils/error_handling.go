@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -112,15 +113,41 @@ func IsSpotifyNotFoundError(err error) bool {
 
 // SetResourceDataWithErrorCheck sets a value in the ResourceData and checks for errors
 func SetResourceDataWithErrorCheck(d *schema.ResourceData, key string, value interface{}, ctx context.Context) diag.Diagnostics {
-    if err := d.Set(key, value); err != nil {
-        logger := logging.DefaultLogger.WithContext(ctx)
-        logger.Error("Error setting resource data",
-            "key", key,
-            "error", err.Error(),
-        )
-        return diag.FromErr(fmt.Errorf("error setting %s: %s", key, err))
-    }
-    return nil
+	if err := d.Set(key, value); err != nil {
+		logger := logging.DefaultLogger.WithContext(ctx)
+		logger.Error("Error setting resource data",
+			"key", key,
+			"error", err.Error(),
+		)
+		return diag.FromErr(fmt.Errorf("error setting %s: %s", key, err))
+	}
+	return nil
+}
+
+// SetResourceDataSafe sets a value in the ResourceData and logs any errors
+// Returns true if successful, false if there was an error
+func SetResourceDataSafe(d *schema.ResourceData, key string, value interface{}, ctx context.Context) bool {
+	if err := d.Set(key, value); err != nil {
+		logger := logging.DefaultLogger.WithContext(ctx)
+		logger.Error("Error setting resource data",
+			"key", key,
+			"error", err.Error(),
+		)
+		return false
+	}
+	return true
+}
+
+// HandleResponseBodyClose safely closes an HTTP response body and logs any errors
+func HandleResponseBodyClose(ctx context.Context, resp *http.Response) {
+	if resp != nil {
+		if err := resp.Body.Close(); err != nil {
+			logger := logging.DefaultLogger.WithContext(ctx)
+			logger.Error("Error closing response body",
+				"error", err.Error(),
+			)
+		}
+	}
 }
 
 // Example of how to use these utilities in a resource read function

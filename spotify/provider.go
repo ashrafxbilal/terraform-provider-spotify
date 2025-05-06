@@ -3,8 +3,8 @@ package spotify
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"io"
+	"net/http"
 	"os"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -52,13 +52,13 @@ func Provider() *schema.Provider {
 			"spotify_playlist_cover": resourceSpotifyPlaylistCover(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"spotify_tracks":  dataSourceSpotifyTracks(),
-			"spotify_weather": dataSourceWeather(),
-			"spotify_time":    dataSourceTime(),
-			"spotify_user":    dataSourceUser(),
-			"spotify_user_preferences": dataSourceUserPreferences(),
+			"spotify_tracks":             dataSourceSpotifyTracks(),
+			"spotify_weather":            dataSourceWeather(),
+			"spotify_time":               dataSourceTime(),
+			"spotify_user":               dataSourceUser(),
+			"spotify_user_preferences":   dataSourceUserPreferences(),
 			"spotify_featured_playlists": dataSourceFeaturedPlaylists(),
-			"spotify_new_releases":      dataSourceNewReleases(),
+			"spotify_new_releases":       dataSourceNewReleases(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
@@ -88,8 +88,8 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 			TokenURL: "https://accounts.spotify.com/api/token",
 		},
 		Scopes: []string{
-			"user-read-private", 
-			"playlist-modify-public", 
+			"user-read-private",
+			"playlist-modify-public",
 			"playlist-modify-private",
 			"user-top-read",
 			"user-read-recently-played",
@@ -109,14 +109,24 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	fmt.Printf("Access Token: %s...\n", newToken.AccessToken[:10])
 	fmt.Printf("Token Type: %s\n", newToken.TokenType)
 	fmt.Printf("Token Expiry: %s\n", newToken.Expiry.String())
-	
+
 	// Set credentials as environment variables for other resources to use
 	// This is a workaround for resources that need to make direct API calls
-	os.Setenv("SPOTIFY_ACCESS_TOKEN", newToken.AccessToken)
-	os.Setenv("SPOTIFY_REFRESH_TOKEN", refreshToken)
-	os.Setenv("SPOTIFY_CLIENT_ID", clientID)
-	os.Setenv("SPOTIFY_CLIENT_SECRET", clientSecret)
-	os.Setenv("SPOTIFY_REDIRECT_URI", redirectURI)
+	if err := os.Setenv("SPOTIFY_ACCESS_TOKEN", newToken.AccessToken); err != nil {
+		return nil, diag.FromErr(fmt.Errorf("error setting SPOTIFY_ACCESS_TOKEN environment variable: %s", err))
+	}
+	if err := os.Setenv("SPOTIFY_REFRESH_TOKEN", refreshToken); err != nil {
+		return nil, diag.FromErr(fmt.Errorf("error setting SPOTIFY_REFRESH_TOKEN environment variable: %s", err))
+	}
+	if err := os.Setenv("SPOTIFY_CLIENT_ID", clientID); err != nil {
+		return nil, diag.FromErr(fmt.Errorf("error setting SPOTIFY_CLIENT_ID environment variable: %s", err))
+	}
+	if err := os.Setenv("SPOTIFY_CLIENT_SECRET", clientSecret); err != nil {
+		return nil, diag.FromErr(fmt.Errorf("error setting SPOTIFY_CLIENT_SECRET environment variable: %s", err))
+	}
+	if err := os.Setenv("SPOTIFY_REDIRECT_URI", redirectURI); err != nil {
+		return nil, diag.FromErr(fmt.Errorf("error setting SPOTIFY_REDIRECT_URI environment variable: %s", err))
+	}
 
 	httpClient := oauthConfig.Client(ctx, newToken)
 	spotifyClient := spotify.New(httpClient)
@@ -124,19 +134,25 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	// Test with explicit API call format
 	req, err := http.NewRequest("GET", "https://api.spotify.com/v1/recommendations?seed_genres=pop&limit=1", nil)
 	if err != nil {
-    	fmt.Printf("Error creating request: %s\n", err)
+		fmt.Printf("Error creating request: %s\n", err)
 	} else {
-    	req.Header.Set("Authorization", "Bearer "+newToken.AccessToken)
-    	resp, err := httpClient.Do(req)
-    if err != nil {
-        fmt.Printf("Error making direct API call: %s\n", err)
-    } else {
-        fmt.Printf("Direct API call status: %d\n", resp.StatusCode)
-        body, _ := io.ReadAll(resp.Body)
-        fmt.Printf("Response body: %s\n", string(body))
-        resp.Body.Close()
-    }
-}
+		req.Header.Set("Authorization", "Bearer "+newToken.AccessToken)
+		resp, httpErr := httpClient.Do(req)
+		if httpErr != nil {
+			fmt.Printf("Error making direct API call: %s\n", httpErr)
+		} else {
+			fmt.Printf("Direct API call status: %d\n", resp.StatusCode)
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				fmt.Printf("Error reading response body: %s\n", err)
+			} else {
+				fmt.Printf("Response body: %s\n", string(body))
+			}
+			if err := resp.Body.Close(); err != nil {
+				fmt.Printf("Error closing response body: %s\n", err)
+			}
+		}
+	}
 
 	// Test API connection
 	user, err := spotifyClient.CurrentUser(ctx)

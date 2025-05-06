@@ -3,7 +3,6 @@ module github.com/ashrafxbilal/terraform-provider-spotify
 // Pin Go version to ensure consistent builds
 go 1.23.0
 
-// Explicitly set toolchain version
 toolchain go1.24.2
 
 // Main dependencies with pinned versions
