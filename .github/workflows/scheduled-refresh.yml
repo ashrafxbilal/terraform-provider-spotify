@@ -20,12 +20,7 @@ jobs:
         with:
           terraform_version: 1.0.0
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+
 
       - name: Set up environment variables
         run: |
@@ -33,7 +28,7 @@ jobs:
           echo "TF_VAR_spotify_client_secret=${{ secrets.SPOTIFY_CLIENT_SECRET }}" >> $GITHUB_ENV
           echo "TF_VAR_spotify_redirect_uri=${{ secrets.SPOTIFY_REDIRECT_URI }}" >> $GITHUB_ENV
           echo "TF_VAR_spotify_refresh_token=${{ secrets.SPOTIFY_REFRESH_TOKEN }}" >> $GITHUB_ENV
-          echo "TF_VAR_weather_api_key=${{ secrets.WEATHER_API_KEY }}" >> $GITHUB_ENV
+  
 
       - name: Initialize Terraform
         run: |
