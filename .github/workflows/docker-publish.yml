@@ -7,13 +7,13 @@ on:
     branches:
       - main
     paths:
-      - 'Dockerfile'
-      - 'Dockerfile.dev'
+      - 'docker/Dockerfile'
+      - 'docker/Dockerfile.dev'
       - '.github/workflows/docker-publish.yml'
   pull_request:
     paths:
-      - 'Dockerfile'
-      - 'Dockerfile.dev'
+      - 'docker/Dockerfile'
+      - 'docker/Dockerfile.dev'
       - '.github/workflows/docker-publish.yml'
   workflow_dispatch:
 
@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          file: ./docker/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-runtime.outputs.tags }}
           labels: ${{ steps.meta-runtime.outputs.labels }}
@@ -85,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile.dev
+          file: ./docker/Dockerfile.dev
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-dev.outputs.tags }}
           labels: ${{ steps.meta-dev.outputs.labels }}
