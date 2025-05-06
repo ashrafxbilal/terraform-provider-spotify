@@ -279,15 +279,16 @@ data "spotify_tracks" "genre_exploration" {
 }
 
 resource "spotify_playlist" "combined_playlist" {
-  name        = "${data.spotify_time.now.day_of_week} Surprise Mix for ${data.spotify_weather.current.temperature}°C"
-  description = "Refreshed ${formatdate("YYYY-MM-DD HH:mm", timestamp())} by Terraform, it's giving ${data.spotify_time.now.mood} mood core for ${data.spotify_time.now.day_of_week} ${data.spotify_time.now.time_of_day} szn."
+  name        = "Daily Surprise Mix"
+  description = "Refreshed ${formatdate("YYYY-MM-DD HH:mm", timestamp())} by Terraform. Today: ${data.spotify_time.now.day_of_week}, ${data.spotify_weather.current.temperature}°C, ${data.spotify_time.now.mood} mood."
   public      = true
   
-  # Ensure the playlist is created with all tracks before applying the cover
+  # Ensure the playlist is updated rather than recreated
   lifecycle {
     create_before_destroy = true
-    # Force recreation of the playlist on each apply to ensure fresh tracks
-    ignore_changes = []
+    # Prevent recreation of the playlist by ignoring changes to these fields
+    # This ensures we update the same playlist rather than creating a new one
+    ignore_changes = [name, id]
   }
   
   # Combine all track sources with a focus on discovery and featured tracks
