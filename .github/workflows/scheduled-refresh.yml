@@ -32,12 +32,12 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          cd examples/scheduled_refresh
+          cd docs/examples/scheduled_refresh
           terraform init
 
       - name: Apply Terraform
         run: |
-          cd examples/scheduled_refresh
+          cd docs/examples/scheduled_refresh
           terraform apply -auto-approve
 
       - name: Log refresh completion

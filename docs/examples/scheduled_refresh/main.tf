@@ -12,7 +12,6 @@ provider "spotify" {
   client_secret = var.spotify_client_secret
   redirect_uri  = var.spotify_redirect_uri
   refresh_token = var.spotify_refresh_token
-  weather_api_key = var.weather_api_key
 }
 
 # Get current user information
