@@ -14,7 +14,7 @@
 terraform {
   required_providers {
     spotify = {
-      source  = "local/spotify"
+      source  = "ashrafxbilal/spotify"
       version = "0.1.0"
     }
   }
