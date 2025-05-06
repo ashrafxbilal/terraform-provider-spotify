@@ -1,4 +1,4 @@
-name: Scheduled Playlist Refresh
+name: Build Playlist
 
 on:
   schedule:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   refresh-playlists:
-    name: Refresh Dynamic Playlists
+    name: Getting Your Weather and Mood Updates
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,12 +41,12 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          cd docs/examples/scheduled_refresh
+          cd docs/examples/basic_playlist
           terraform init
 
       - name: Apply Terraform
         run: |
-          cd docs/examples/scheduled_refresh
+          cd docs/examples/basic_playlist
           terraform apply -auto-approve
 
       - name: Log refresh completion
