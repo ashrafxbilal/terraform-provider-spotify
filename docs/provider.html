@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Provider - Terraform Spotify Provider</title>
+  <meta name="description" content="The Spotify provider allows Terraform to manage Spotify resources like playlists and tracks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css">
+  <style>
+    .doc-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .doc-header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 20px;
+    }
+    
+    .doc-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .doc-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+    
+    .doc-section {
+      margin-bottom: 40px;
+    }
+    
+    .doc-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .doc-section h3 {
+      font-size: 1.4rem;
+      margin: 24px 0 16px;
+    }
+    
+    .doc-section p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    
+    .doc-section ul {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+    
+    .doc-section li {
+      margin-bottom: 8px;
+    }
+    
+    .doc-section code {
+      background-color: var(--bg-tertiary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+    }
+    
+    .doc-section pre {
+      background-color: var(--bg-tertiary);
+      padding: 16px;
+      border-radius: var(--card-radius);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+    
+    .doc-section pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      display: block;
+      line-height: 1.5;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+    
+    .attribute-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    
+    .attribute-table th,
+    .attribute-table td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .attribute-table th {
+      background-color: var(--bg-tertiary);
+      font-weight: 600;
+    }
+    
+    .attribute-table tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <i class="ri-spotify-fill"></i>
+        <span>Terraform Spotify Provider</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#examples">Examples</a></li>
+          <li><a href="index.html#docs">Docs</a></li>
+          <li><a href="index.html#getting-started">Get Started</a></li>
+        </ul>
+      </nav>
+      <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" class="github-button" target="_blank">
+        <i class="ri-github-fill"></i> GitHub
+      </a>
+    </div>
+  </header>
+
+  <div class="doc-content">
+    <a href="index.html#docs" class="back-link">
+      <i class="ri-arrow-left-line"></i> Back to Documentation
+    </a>
+    
+    <div class="doc-header">
+      <div class="creator-badge">Created by Bilal Ashraf</div>
+      <h1>Spotify Provider</h1>
+      <p>The Spotify provider allows you to manage Spotify resources like playlists and tracks using infrastructure as code. It also provides data sources for retrieving information based on weather, time, and user profiles to create dynamic, mood-based playlists.</p>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Example Usage</h2>
+      <pre><code><span class="code-keyword">terraform</span> {
+  <span class="code-keyword">required_providers</span> {
+    <span class="code-keyword">spotify</span> = {
+      <span class="code-keyword">source</span>  = <span class="code-string">"ashrafxbilal/spotify"</span>
+      <span class="code-keyword">version</span> = <span class="code-string">"0.1.0"</span>
+    }
+  }
+}
+
+<span class="code-keyword">provider</span> <span class="code-string">"spotify"</span> {
+  <span class="code-keyword">client_id</span>     = var.spotify_client_id
+  <span class="code-keyword">client_secret</span> = var.spotify_client_secret
+  <span class="code-keyword">redirect_uri</span>  = var.spotify_redirect_uri
+  <span class="code-keyword">refresh_token</span> = var.spotify_refresh_token
+}</code></pre>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Authentication</h2>
+      <p>The Spotify provider requires several credentials to authenticate with the Spotify API:</p>
+      
+      <table class="attribute-table">
+        <thead>
+          <tr>
+            <th>Credential</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>client_id</code></td>
+            <td>Your Spotify application client ID</td>
+          </tr>
+          <tr>
+            <td><code>client_secret</code></td>
+            <td>Your Spotify application client secret</td>
+          </tr>
+          <tr>
+            <td><code>redirect_uri</code></td>
+            <td>The redirect URI configured for your Spotify application</td>
+          </tr>
+          <tr>
+            <td><code>refresh_token</code></td>
+            <td>A refresh token obtained through the OAuth flow</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p>These can be provided in the provider configuration block or as environment variables:</p>
+      
+      <pre><code><span class="code-comment"># Set environment variables for authentication</span>
+export SPOTIFY_CLIENT_ID="your-client-id"
+export SPOTIFY_CLIENT_SECRET="your-client-secret"
+export SPOTIFY_REDIRECT_URI="your-redirect-uri"
+export SPOTIFY_REFRESH_TOKEN="your-refresh-token"</code></pre>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Getting Started</h2>
+      
+      <h3>1. Create a Spotify Developer Application</h3>
+      <p>Before using this provider, you need to create a Spotify Developer application:</p>
+      <ol>
+        <li>Go to the <a href="https://developer.spotify.com/dashboard/" target="_blank">Spotify Developer Dashboard</a></li>
+        <li>Log in with your Spotify account</li>
+        <li>Click "Create an App"</li>
+        <li>Fill in the app name and description</li>
+        <li>Click "Edit Settings" and add a redirect URI (e.g., <code>http://localhost:8888/callback</code>)</li>
+        <li>Save the Client ID and Client Secret</li>
+      </ol>
+      
+      <h3>2. Obtain a Refresh Token</h3>
+      <p>To obtain a refresh token, you can use the included authentication helper:</p>
+      <pre><code><span class="code-comment"># Clone the repository</span>
+git clone https://github.com/ashrafxbilal/terraform-provider-spotify.git
+cd terraform-provider-spotify
+
+<span class="code-comment"># Set your Spotify credentials</span>
+export SPOTIFY_CLIENT_ID="your-client-id"
+export SPOTIFY_CLIENT_SECRET="your-client-secret"
+export SPOTIFY_REDIRECT_URI="your-redirect-uri"
+
+<span class="code-comment"># Run the authentication helper</span>
+go run spotify_auth_proxy/spotify-auth.go</code></pre>
+      
+      <p>Follow the instructions to authorize the application and obtain a refresh token.</p>
+      
+      <h3>3. Configure Terraform</h3>
+      <p>Create a Terraform configuration file (e.g., <code>main.tf</code>) with the provider configuration:</p>
+      <pre><code><span class="code-keyword">terraform</span> {
+  <span class="code-keyword">required_providers</span> {
+    <span class="code-keyword">spotify</span> = {
+      <span class="code-keyword">source</span>  = <span class="code-string">"ashrafxbilal/spotify"</span>
+      <span class="code-keyword">version</span> = <span class="code-string">"0.1.0"</span>
+    }
+  }
+}
+
+<span class="code-keyword">provider</span> <span class="code-string">"spotify"</span> {
+  <span class="code-keyword">client_id</span>     = var.spotify_client_id
+  <span class="code-keyword">client_secret</span> = var.spotify_client_secret
+  <span class="code-keyword">redirect_uri</span>  = var.spotify_redirect_uri
+  <span class="code-keyword">refresh_token</span> = var.spotify_refresh_token
+}</code></pre>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Provider Arguments</h2>
+      
+      <table class="attribute-table">
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>client_id</code></td>
+            <td>(Required) Your Spotify application client ID. Can also be set with the <code>SPOTIFY_CLIENT_ID</code> environment variable.</td>
+          </tr>
+          <tr>
+            <td><code>client_secret</code></td>
+            <td>(Required) Your Spotify application client secret. Can also be set with the <code>SPOTIFY_CLIENT_SECRET</code> environment variable.</td>
+          </tr>
+          <tr>
+            <td><code>redirect_uri</code></td>
+            <td>(Required) The redirect URI configured for your Spotify application. Can also be set with the <code>SPOTIFY_REDIRECT_URI</code> environment variable.</td>
+          </tr>
+          <tr>
+            <td><code>refresh_token</code></td>
+            <td>(Required) A refresh token obtained through the OAuth flow. Can also be set with the <code>SPOTIFY_REFRESH_TOKEN</code> environment variable.</td>
+          </tr>
+          <tr>
+            <td><code>api_url</code></td>
+            <td>(Optional) The Spotify API URL. Defaults to <code>https://api.spotify.com/v1</code>.</td>
+          </tr>
+          <tr>
+            <td><code>auth_url</code></td>
+            <td>(Optional) The Spotify authentication URL. Defaults to <code>https://accounts.spotify.com/api/token</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">
+        &copy; 2025 Terraform Spotify Provider - Bilal Ashraf
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" target="_blank">GitHub</a>
+        <a href="index.html#docs">Documentation</a>
+        <a href="index.html#examples">Examples</a>
+        <a href="index.html#getting-started">Get Started</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>

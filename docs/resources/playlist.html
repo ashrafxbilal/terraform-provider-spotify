@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spotify_playlist Resource - Terraform Spotify Provider</title>
+  <meta name="description" content="Manages a Spotify playlist.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css">
+  <style>
+    .doc-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .doc-header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 20px;
+    }
+    
+    .doc-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .doc-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+    
+    .doc-section {
+      margin-bottom: 40px;
+    }
+    
+    .doc-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .doc-section h3 {
+      font-size: 1.4rem;
+      margin: 24px 0 16px;
+    }
+    
+    .doc-section p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    
+    .doc-section ul {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+    
+    .doc-section li {
+      margin-bottom: 8px;
+    }
+    
+    .doc-section code {
+      background-color: var(--bg-tertiary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+    }
+    
+    .doc-section pre {
+      background-color: var(--bg-tertiary);
+      padding: 16px;
+      border-radius: var(--card-radius);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+    
+    .doc-section pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      display: block;
+      line-height: 1.5;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+    
+    .attribute-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    
+    .attribute-table th,
+    .attribute-table td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .attribute-table th {
+      background-color: var(--bg-tertiary);
+      font-weight: 600;
+    }
+    
+    .attribute-table tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <i class="ri-spotify-fill"></i>
+        <span>Terraform Spotify Provider</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="../index.html#features">Features</a></li>
+          <li><a href="../index.html#examples">Examples</a></li>
+          <li><a href="../index.html#docs">Docs</a></li>
+          <li><a href="../index.html#getting-started">Get Started</a></li>
+        </ul>
+      </nav>
+      <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" class="github-button" target="_blank">
+        <i class="ri-github-fill"></i> GitHub
+      </a>
+    </div>
+  </header>
+
+  <div class="doc-content">
+    <a href="../index.html#docs" class="back-link">
+      <i class="ri-arrow-left-line"></i> Back to Documentation
+    </a>
+    
+    <div class="doc-header">
+      <div class="creator-badge">Created by Bilal Ashraf</div>
+      <h1>Resource: spotify_playlist</h1>
+      <p>Manages a Spotify playlist. This resource allows you to create, update, and delete playlists in your Spotify account, as well as manage the tracks within them.</p>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Example Usage</h2>
+      <pre><code><span class="code-keyword">resource</span> <span class="code-string">"spotify_playlist"</span> <span class="code-string">"example"</span> {
+  <span class="code-keyword">name</span>        = <span class="code-string">"My Terraform Playlist"</span>
+  <span class="code-keyword">description</span> = <span class="code-string">"Created and managed by Terraform"</span>
+  <span class="code-keyword">public</span>      = <span class="code-keyword">true</span>
+  <span class="code-keyword">tracks</span>      = [<span class="code-string">"spotify:track:4iV5W9uYEdYUVa79Axb7Rh"</span>, <span class="code-string">"spotify:track:1301WleyT98MSxVHPZCA6M"</span>]
+}</code></pre>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Dynamic Playlist Example</h2>
+      <pre><code><span class="code-keyword">data</span> <span class="code-string">"spotify_time"</span> <span class="code-string">"now"</span> {}
+<span class="code-keyword">data</span> <span class="code-string">"spotify_weather"</span> <span class="code-string">"current"</span> {}
+<span class="code-keyword">data</span> <span class="code-string">"spotify_tracks"</span> <span class="code-string">"recommended"</span> {
+  <span class="code-keyword">genre</span> = data.spotify_time.now.genre
+  <span class="code-keyword">mood</span>  = data.spotify_weather.current.mood
+  <span class="code-keyword">limit</span> = 20
+}
+
+<span class="code-keyword">resource</span> <span class="code-string">"spotify_playlist"</span> <span class="code-string">"dynamic"</span> {
+  <span class="code-keyword">name</span>        = <span class="code-string">"${data.spotify_weather.current.mood} ${data.spotify_time.now.time_of_day} Mix"</span>
+  <span class="code-keyword">description</span> = <span class="code-string">"Auto-generated based on weather and time of day"</span>
+  <span class="code-keyword">public</span>      = <span class="code-keyword">true</span>
+  <span class="code-keyword">tracks</span>      = data.spotify_tracks.recommended.ids
+}</code></pre>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Argument Reference</h2>
+      
+      <table class="attribute-table">
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>name</code></td>
+            <td>(Required) The name of the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>description</code></td>
+            <td>(Optional) The description of the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>public</code></td>
+            <td>(Optional) Whether the playlist is public. Defaults to <code>true</code>.</td>
+          </tr>
+          <tr>
+            <td><code>tracks</code></td>
+            <td>(Optional) A list of Spotify track URIs or IDs to add to the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>collaborative</code></td>
+            <td>(Optional) Whether the playlist is collaborative. Defaults to <code>false</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Attribute Reference</h2>
+      
+      <table class="attribute-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>id</code></td>
+            <td>The ID of the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>snapshot_id</code></td>
+            <td>The version identifier for the current state of the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>uri</code></td>
+            <td>The Spotify URI for the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>url</code></td>
+            <td>The Spotify URL for the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>track_count</code></td>
+            <td>The number of tracks in the playlist.</td>
+          </tr>
+          <tr>
+            <td><code>owner_id</code></td>
+            <td>The Spotify user ID of the playlist owner.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="doc-section">
+      <h2>Import</h2>
+      <p>Playlists can be imported using the Spotify playlist ID, e.g.:</p>
+      <pre><code>terraform import spotify_playlist.example 3cEYpjA9oz9GiPac4AsH4n</code></pre>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">
+        &copy; 2025 Terraform Spotify Provider - Bilal Ashraf
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" target="_blank">GitHub</a>
+        <a href="../index.html#docs">Documentation</a>
+        <a href="../index.html#examples">Examples</a>
+        <a href="../index.html#getting-started">Get Started</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../script.js"></script>
+</body>
+</html>
