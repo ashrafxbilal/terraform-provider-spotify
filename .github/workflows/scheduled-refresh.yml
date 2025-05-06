@@ -20,7 +20,16 @@ jobs:
         with:
           terraform_version: 1.0.0
 
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
 
+      - name: Build and install provider
+        run: |
+          go build -o terraform-provider-spotify
+          mkdir -p ~/.terraform.d/plugins/registry.terraform.io/ashrafxbilal/spotify/0.1.0/linux_amd64
+          cp terraform-provider-spotify ~/.terraform.d/plugins/registry.terraform.io/ashrafxbilal/spotify/0.1.0/linux_amd64/
 
       - name: Set up environment variables
         run: |
