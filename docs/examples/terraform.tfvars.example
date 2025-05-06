@@ -1,0 +1,4 @@
+spotify_client_id     = ""
+spotify_client_secret = ""
+spotify_redirect_uri  = "https://glitch.com/~spotify-oauth-redirect"
+spotify_refresh_token = ""

@@ -69,7 +69,7 @@ data "spotify_user_preferences" "long_term_taste" {
 
 # Small selection from user's absolute top genre
 data "spotify_tracks" "top_genre_limited" {
-  genre = length(data.spotify_user_preferences.medium_term_taste.suggested_seed_genres) > 0 ? data.spotify_user_preferences.medium_term_taste.suggested_seed_genres[0] : "pop"
+  genre = length(data.spotify_user_preferences.medium_term_taste.suggested_seed_genres) > 0 ? "${data.spotify_user_preferences.medium_term_taste.suggested_seed_genres[0]}${data.spotify_time.now.hour}" : "pop${data.spotify_time.now.hour}"
   mood  = data.spotify_weather.current.mood
   limit = 5
 }
@@ -97,21 +97,21 @@ data "spotify_tracks" "long_term_genre" {
 
 # Tracks based on weather mood using user's 4th top genre
 data "spotify_tracks" "weather_based" {
-  genre = length(data.spotify_user_preferences.medium_term_taste.suggested_seed_genres) > 3 ? data.spotify_user_preferences.medium_term_taste.suggested_seed_genres[3] : "pop"
+  genre = length(data.spotify_user_preferences.medium_term_taste.suggested_seed_genres) > 3 ? "${data.spotify_user_preferences.medium_term_taste.suggested_seed_genres[3]}${data.spotify_weather.current.temperature}" : "pop${data.spotify_weather.current.temperature}"
   mood  = data.spotify_weather.current.mood
   limit = 15
 }
 
 # Tracks based on time of day using user's 3rd top genre
 data "spotify_tracks" "time_based" {
-  genre = length(data.spotify_user_preferences.long_term_taste.suggested_seed_genres) > 2 ? data.spotify_user_preferences.long_term_taste.suggested_seed_genres[2] : "rock"
+  genre = length(data.spotify_user_preferences.long_term_taste.suggested_seed_genres) > 2 ? "${data.spotify_user_preferences.long_term_taste.suggested_seed_genres[2]}${data.spotify_time.now.time_of_day}${data.spotify_time.now.hour}" : "rock${data.spotify_time.now.time_of_day}${data.spotify_time.now.hour}"
   mood  = data.spotify_time.now.mood
   limit = 15 
 }
 
 # Tracks based on day of week using user's 4th top genre
 data "spotify_tracks" "day_based" {
-  genre = length(data.spotify_user_preferences.short_term_taste.suggested_seed_genres) > 3 ? data.spotify_user_preferences.short_term_taste.suggested_seed_genres[3] : "electronic"
+  genre = length(data.spotify_user_preferences.short_term_taste.suggested_seed_genres) > 3 ? "${data.spotify_user_preferences.short_term_taste.suggested_seed_genres[3]}${data.spotify_time.now.day_of_week}${data.spotify_time.now.hour}" : "electronic${data.spotify_time.now.day_of_week}${data.spotify_time.now.hour}"
   mood  = data.spotify_time.now.mood
   limit = 15 
 }
@@ -125,8 +125,8 @@ data "spotify_tracks" "day_based" {
 data "spotify_tracks" "global_50_tracks" {
   # Always run this data source to ensure we get popular global tracks
   
-  # Use pop genre for global hits
-  genre = "pop"
+  # Use pop genre for global hits with day of week to vary results
+  genre = "pop${data.spotify_time.now.day_of_week}"
   
   # Use energetic mood for popular tracks
   mood  = "energetic"
@@ -140,8 +140,8 @@ data "spotify_tracks" "global_50_tracks" {
 
 # Dedicated source for English rock tracks
 data "spotify_tracks" "english_rock_tracks" {
-  # Use rock genre which is predominantly English
-  genre = "rock"
+  # Use rock genre which is predominantly English, add time of day for variation
+  genre = "rock${data.spotify_time.now.time_of_day}"
   
   # Match current mood for consistency
   mood  = data.spotify_weather.current.mood
@@ -155,8 +155,8 @@ data "spotify_tracks" "english_rock_tracks" {
 
 # Dedicated source for English pop tracks
 data "spotify_tracks" "english_pop_tracks" {
-  # Use pop genre which is predominantly English
-  genre = "pop"
+  # Use pop genre which is predominantly English, add temperature for variation
+  genre = "pop${data.spotify_weather.current.temperature}"
   
   # Match current mood for consistency
   mood  = data.spotify_weather.current.mood
@@ -172,8 +172,8 @@ data "spotify_tracks" "english_pop_tracks" {
 data "spotify_tracks" "new_releases_tracks" {
   # Always run this data source to ensure we get recent music
   
-  # Use user's top genre for new releases
-  genre = length(data.spotify_user_preferences.short_term_taste.suggested_seed_genres) > 0 ? data.spotify_user_preferences.short_term_taste.suggested_seed_genres[0] : "pop"
+  # Use user's top genre for new releases with day and time for variation
+  genre = length(data.spotify_user_preferences.short_term_taste.suggested_seed_genres) > 0 ? "${data.spotify_user_preferences.short_term_taste.suggested_seed_genres[0]}${data.spotify_time.now.day_of_week}${data.spotify_time.now.time_of_day}" : "pop${data.spotify_time.now.day_of_week}"
   
   # Use current mood
   mood  = data.spotify_weather.current.mood
@@ -186,7 +186,7 @@ data "spotify_tracks" "new_releases_tracks" {
 }
 
 resource "spotify_playlist" "combined_playlist" {
-  name        = "${data.spotify_time.now.day_of_week} Vibes @ ${data.spotify_weather.current.temperature}° ✨"
+  name        = "${data.spotify_time.now.day_of_week} Vibes @ ${data.spotify_weather.current.temperature}°C ✨"
   description = "it's giving ${data.spotify_time.now.mood} mood core for ${data.spotify_time.now.day_of_week} ${data.spotify_time.now.time_of_day} szn."
   public      = true
   
@@ -211,11 +211,3 @@ resource "spotify_playlist" "combined_playlist" {
   ))
 }
 
-###############################################################################
-# Additional Data Sources - Featured Playlists and New Releases
-###############################################################################
-
-# We're no longer using these data sources directly
-# Instead, we're using spotify_tracks with specific parameters to get:
-# 1. Latest releases from user's top genres (past month)
-# 2. Global 50 popular tracks
