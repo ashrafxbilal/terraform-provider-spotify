@@ -110,6 +110,19 @@ func IsSpotifyNotFoundError(err error) bool {
 	return err != nil && strings.Contains(strings.ToLower(err.Error()), "not found")
 }
 
+// SetResourceDataWithErrorCheck sets a value in the ResourceData and checks for errors
+func SetResourceDataWithErrorCheck(d *schema.ResourceData, key string, value interface{}, ctx context.Context) diag.Diagnostics {
+    if err := d.Set(key, value); err != nil {
+        logger := logging.DefaultLogger.WithContext(ctx)
+        logger.Error("Error setting resource data",
+            "key", key,
+            "error", err.Error(),
+        )
+        return diag.FromErr(fmt.Errorf("error setting %s: %s", key, err))
+    }
+    return nil
+}
+
 // Example of how to use these utilities in a resource read function
 func ExampleResourceRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	logger := logging.DefaultLogger.WithContext(ctx)

@@ -20,15 +20,16 @@ This Terraform provider allows you to manage Spotify resources like playlists an
 
 ## Dependency Management
 
-This project uses pinned dependency versions to ensure reproducible builds. For more information on our dependency management strategy, please see [DEPENDENCIES.md](DEPENDENCIES.md).
+This project uses pinned dependency versions to ensure reproducible builds. For more information on our dependency management strategy, please see [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md).
 
 ## Versioning
 
-This project follows semantic versioning principles to ensure compatibility and clearly communicate changes. For detailed guidelines on our versioning strategy, please see [VERSIONING.md](VERSIONING.md).
+This project follows semantic versioning principles to ensure compatibility and clearly communicate changes. For detailed guidelines on our versioning strategy, please see [docs/VERSIONING.md](docs/VERSIONING.md).
 
 ## CI/CD Pipeline and Testing
 
 This project implements a comprehensive CI/CD pipeline with GitHub Actions, including automated testing, security scanning, and scheduled playlist refreshes. For more information, please see [CI_CD.md](CI_CD.md).
+
 
 ### Running Acceptance Tests
 
@@ -52,7 +53,7 @@ go test -v ./spotify -timeout 120m
 
 ## Docker Containers
 
-This project provides Docker containers for both development and runtime use, making it easier to contribute to the project and use the provider without installing dependencies locally. The containers are automatically built and published to Docker Hub. For more information on using the Docker containers, please see [DOCKER.md](DOCKER.md).
+This project provides Docker containers for both development and runtime use, making it easier to contribute to the project and use the provider without installing dependencies locally. The containers are automatically built and published to Docker Hub. All Docker-related files are located in the `docker` directory. For more information on using the Docker containers, please see [docs/DOCKER.md](docs/DOCKER.md).
 
 ## Building the Provider
 
@@ -369,4 +370,4 @@ Contributions are welcome! Here's how you can contribute to this project:
 
 ## License
 
-MIT
+Unlicensed.
