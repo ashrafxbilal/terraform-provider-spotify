@@ -47,8 +47,13 @@ jobs:
           check-latest: true
           cache: true
 
-      - name: Verify dependencies
-        run: go mod verify
+      - name: Fix go.mod and verify dependencies
+        run: |
+          # Fix go.mod file format issues
+          sed -i 's/go 1.23.0/go 1.23/' go.mod
+          sed -i '/toolchain go1.24.2/d' go.mod
+          # Now verify dependencies
+          go mod verify
 
       - name: Build
         run: go build -v ./...
