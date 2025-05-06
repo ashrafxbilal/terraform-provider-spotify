@@ -33,6 +33,11 @@ secrets.env
 .env
 secrets.env
 *.tfvars
+*.gpg
+*.key
+*.pem
+*.pub
+*.p12
 
 # IDE files
 .idea/

@@ -2,7 +2,7 @@
 # Multi-stage build with distroless final image
 
 # Build stage
-FROM golang:1.20-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 # Install build dependencies and development tools
 RUN apk add --no-cache \
@@ -30,6 +30,9 @@ RUN go mod download
 # Copy the rest of the source code
 COPY . .
 
+# Update go.mod
+RUN go mod tidy
+
 # Build the provider
 RUN make build
 
@@ -44,7 +47,7 @@ COPY --from=builder /app/go.mod /app/go.mod
 COPY --from=builder /app/go.sum /app/go.sum
 COPY --from=builder /app/Makefile /app/Makefile
 COPY --from=builder /app/scripts /app/scripts
-COPY --from=builder /app/examples /app/examples
+COPY --from=builder /app/docs/examples /app/examples
 COPY --from=builder /app/spotify /app/spotify
 COPY --from=builder /app/spotify_auth_proxy /app/spotify_auth_proxy
 COPY --from=builder /app/version /app/version

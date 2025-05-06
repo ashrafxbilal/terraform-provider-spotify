@@ -1,8 +1,6 @@
 module github.com/ashrafxbilal/terraform-provider-spotify
 
-go 1.23.0
-
-toolchain go1.24.2
+go 1.23
 
 // Main dependencies with pinned versions
 require (
