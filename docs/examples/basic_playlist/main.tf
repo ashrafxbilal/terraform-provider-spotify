@@ -186,7 +186,7 @@ data "spotify_tracks" "new_releases_tracks" {
 }
 
 resource "spotify_playlist" "combined_playlist" {
-  name        = "${data.spotify_time.now.day_of_week} Vibes @ ${data.spotify_weather.current.temperature}°C ✨"
+  name        = "${data.spotify_time.now.day_of_week} Terraform Mix @ ${data.spotify_weather.current.temperature}°C ✨"
   description = "it's giving ${data.spotify_time.now.mood} mood core for ${data.spotify_time.now.day_of_week} ${data.spotify_time.now.time_of_day} szn."
   public      = true
   

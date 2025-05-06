@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terraform Spotify Provider</title>
+  <meta name="description" content="Create and manage Spotify playlists with Terraform">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <i class="ri-spotify-fill"></i>
+        <span>Terraform Spotify Provider</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#examples">Examples</a></li>
+          <li><a href="#docs">Docs</a></li>
+          <li><a href="#getting-started">Get Started</a></li>
+        </ul>
+      </nav>
+      <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" class="github-button" target="_blank">
+        <i class="ri-github-fill"></i> GitHub
+      </a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Manage Spotify with Terraform</h1>
+      <p>Create dynamic playlists based on weather, time of day, and your listening history using infrastructure as code.</p>
+      <div class="cta-buttons">
+        <a href="#getting-started" class="primary-button">Get Started</a>
+        <a href="#examples" class="secondary-button">View Examples</a>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-item featured">
+          <i class="ri-music-2-line"></i>
+          <h3>Dynamic Playlists</h3>
+          <p>Create playlists that automatically update based on your mood, the weather, time of day, or your listening history.</p>
+          <a href="#examples">See examples →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-cloud-line"></i>
+          <h3>Weather-Based</h3>
+          <p>Sunny day? Rainy evening? Your playlist adapts to match the current weather conditions.</p>
+        </div>
+        <div class="bento-item">
+          <i class="ri-time-line"></i>
+          <h3>Time-Aware</h3>
+          <p>Morning energy, afternoon focus, or evening chill - get the right vibe at the right time.</p>
+        </div>
+        <div class="bento-item">
+          <i class="ri-history-line"></i>
+          <h3>Listening History</h3>
+          <p>Recommendations based on your short, medium, and long-term listening patterns.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Features</h2>
+        <p>Everything you need to manage your Spotify experience with Terraform</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <i class="ri-playlist-line"></i>
+          <h3>Playlist Management</h3>
+          <p>Create, update, and manage playlists with infrastructure as code. Define tracks, descriptions, and visibility settings.</p>
+        </div>
+        <div class="feature-card">
+          <i class="ri-image-line"></i>
+          <h3>Cover Images</h3>
+          <p>Generate dynamic cover images based on mood, weather, or custom emojis to give your playlists visual personality.</p>
+        </div>
+        <div class="feature-card">
+          <i class="ri-refresh-line"></i>
+          <h3>Scheduled Refreshes</h3>
+          <p>Keep your playlists fresh with scheduled updates using GitHub Actions or any CI/CD pipeline.</p>
+        </div>
+        <div class="feature-card">
+          <i class="ri-user-line"></i>
+          <h3>User Preferences</h3>
+          <p>Access your top artists, genres, and tracks to create personalized recommendations.</p>
+        </div>
+        <div class="feature-card">
+          <i class="ri-cloud-line"></i>
+          <h3>Weather Integration</h3>
+          <p>Connect to weather APIs to generate mood-appropriate playlists based on current conditions.</p>
+        </div>
+        <div class="feature-card">
+          <i class="ri-time-line"></i>
+          <h3>Time-Based Logic</h3>
+          <p>Create different playlists for different times of day, days of the week, or seasons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="code-example" id="examples">
+    <div class="container">
+      <div class="section-title">
+        <h2>See It In Action</h2>
+        <p>Create a dynamic weather-based playlist with just a few lines of code</p>
+      </div>
+
+      <div class="code-container">
+        <pre><code><span class="code-comment"># Get current weather data and mood</span>
+<span class="code-keyword">data</span> <span class="code-string">"spotify_weather"</span> <span class="code-string">"current"</span> {}
+
+<span class="code-comment"># Get time-based information</span>
+<span class="code-keyword">data</span> <span class="code-string">"spotify_time"</span> <span class="code-string">"now"</span> {}
+
+<span class="code-comment"># Get track recommendations based on weather and time</span>
+<span class="code-keyword">data</span> <span class="code-string">"spotify_tracks"</span> <span class="code-string">"recommended"</span> {
+  genre = data.spotify_time.now.suggested_seed_genres[0]
+  mood  = data.spotify_weather.current.mood
+  limit = 20
+}
+
+<span class="code-comment"># Create the dynamic playlist</span>
+<span class="code-keyword">resource</span> <span class="code-string">"spotify_playlist"</span> <span class="code-string">"dynamic"</span> {
+  name        = "${data.spotify_weather.current.mood} ${data.spotify_time.now.time_of_day} Mix"
+  description = "Auto-generated based on weather (${data.spotify_weather.current.condition}) and time (${data.spotify_time.now.time_of_day})"
+  public      = true
+  tracks      = data.spotify_tracks.recommended.ids
+}
+
+<span class="code-comment"># Add a dynamic cover image</span>
+<span class="code-keyword">resource</span> <span class="code-string">"spotify_playlist_cover"</span> <span class="code-string">"dynamic_cover"</span> {
+  playlist_id     = spotify_playlist.dynamic.id
+  mood            = data.spotify_weather.current.mood
+  weather         = data.spotify_weather.current.condition
+  force_update    = true
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="getting-started" id="getting-started">
+    <div class="container">
+      <div class="section-title">
+        <h2>Getting Started</h2>
+        <p>Set up the Terraform Spotify Provider in minutes</p>
+      </div>
+
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Install the Provider</h3>
+          <p>Add the provider to your Terraform configuration:</p>
+          <div class="code-container">
+            <pre><code><span class="code-keyword">terraform</span> {
+  <span class="code-keyword">required_providers</span> {
+    <span class="code-keyword">spotify</span> = {
+      <span class="code-keyword">source</span>  = <span class="code-string">"ashrafxbilal/spotify"</span>
+      <span class="code-keyword">version</span> = <span class="code-string">"0.1.0"</span>
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Configure Authentication</h3>
+          <p>Set up your Spotify API credentials:</p>
+          <div class="code-container">
+            <pre><code><span class="code-keyword">provider</span> <span class="code-string">"spotify"</span> {
+  <span class="code-keyword">client_id</span>     = <span class="code-string">"your-client-id"</span>
+  <span class="code-keyword">client_secret</span> = <span class="code-string">"your-client-secret"</span>
+  <span class="code-keyword">redirect_uri</span>  = <span class="code-string">"your-redirect-uri"</span>
+  <span class="code-keyword">refresh_token</span> = <span class="code-string">"your-refresh-token"</span>
+}</code></pre>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Create Your First Playlist</h3>
+          <p>Start with a simple playlist configuration:</p>
+          <div class="code-container">
+            <pre><code><span class="code-keyword">resource</span> <span class="code-string">"spotify_playlist"</span> <span class="code-string">"example"</span> {
+  <span class="code-keyword">name</span>        = <span class="code-string">"My Terraform Playlist"</span>
+  <span class="code-keyword">description</span> = <span class="code-string">"Created with Terraform"</span>
+  <span class="code-keyword">public</span>      = <span class="code-keyword">true</span>
+  <span class="code-keyword">tracks</span>      = [
+    <span class="code-string">"spotify:track:4iV5W9uYEdYUVa79Axb7Rh"</span>,
+    <span class="code-string">"spotify:track:1301WleyT98MSxVHPZCA6M"</span>
+  ]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="docs" id="docs">
+    <div class="container">
+      <div class="section-title">
+        <h2>Documentation</h2>
+        <p>Explore the full capabilities of the Terraform Spotify Provider</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-item">
+          <i class="ri-book-2-line"></i>
+          <h3>Provider Configuration</h3>
+          <p>Learn how to configure the provider with your Spotify credentials.</p>
+          <a href="/docs/index.md">Read more →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-playlist-line"></i>
+          <h3>Playlist Resource</h3>
+          <p>Create and manage Spotify playlists with Terraform.</p>
+          <a href="/docs/resources/playlist.md">Read more →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-image-line"></i>
+          <h3>Playlist Cover Resource</h3>
+          <p>Generate dynamic cover images for your playlists.</p>
+          <a href="/docs/resources/playlist_cover.md">Read more →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-music-2-line"></i>
+          <h3>Tracks Data Source</h3>
+          <p>Get track recommendations based on various criteria.</p>
+          <a href="/docs/data-sources/tracks.md">Read more →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-cloud-line"></i>
+          <h3>Weather Data Source</h3>
+          <p>Use weather conditions to influence your playlists.</p>
+          <a href="/docs/data-sources/weather.md">Read more →</a>
+        </div>
+        <div class="bento-item">
+          <i class="ri-time-line"></i>
+          <h3>Time Data Source</h3>
+          <p>Create time-aware playlists that change throughout the day.</p>
+          <a href="/docs/data-sources/time.md">Read more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">
+        &copy; 2023 Terraform Spotify Provider
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ashrafxbilal/terraform-provider-spotify" target="_blank">GitHub</a>
+        <a href="#docs">Documentation</a>
+        <a href="#examples">Examples</a>
+        <a href="#getting-started">Get Started</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
