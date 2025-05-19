@@ -3,7 +3,7 @@ name: Build Playlist
 on:
   schedule:
     # Run at 8:00 AM UTC every day
-    - cron: '0 8 * * *'
+    # - cron: '0 8 * * *'
   # Allow manual triggering
   workflow_dispatch:
 
